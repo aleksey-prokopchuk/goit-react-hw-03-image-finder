@@ -1,57 +1,54 @@
 import { Component } from "react";
-import axios from "axios";
+import Searchbar from './Searchbar/Searchbar';
+import { searchImage } from './api/image';
+import Loader from "./Loader/Loader";
+import ImageGallery from './ImageGallery/ImageGallery'
+import Button from './Button/Button'
 
-import Searchbar from './Searchbar/Searchbar'
-import Loader from './Loader/Loader'
-import ImageGallery from "./ImageGallery/ImageGallery";
-
-class App extends Component {
+class App extends Component{
   state = {
     items: [],
     loading: false,
     error: null,
+    search: '',
     page: 1,
-  }
+  };
 
-  componentDidMount() {
-    this.fetchImages();
-  }
+  componentDidUpdate(_, prevState) {
+    const { search, page } = this.state;
+    if ((search && prevState.search !== search) || page > prevState.page)  {
+      this.fetchImage(search, page);
+    };
+  };
 
-  componentDidUpdate(_, prevState) { 
-    const { page } = this.state;
-    if (prevState.page !== page) {
-      this.fetchImages()
-    }
-
-    console.log('componentDidUpdate')
-
-  
-   };
-
-  fetchImages() {
-    const { page } = this.state;
+  async fetchImage() {
+    const { search, page } = this.state;
     this.setState({
       loading: true,
     });
-    axios.get(`https://pixabay.com/api/?q=cat&page=1&key=29410547-eff01d8a7b7e1538418c57ece&image_type=photo&orientation=horizontal&per_page=12&page=${page}`)
-      .then(({ data }) => {
-        this.setState(({items}) => {
-          return {
-            items: [...items, ...data.hits]
-          }
-        })
+    try {
+      const data = await searchImage(search, page);
+      this.setState(({ items }) => {
+        return {
+          items: [...items, ...data.hits]
+        };
       })
-      .catch(error => {
-        this.setState({
-          error
-        })
+    } catch (error) {
+      this.setState({
+        error,
       })
-      .finally(() => {
-        this.setState({
-          loading: false
-        })
-      })
+    } finally {
+      this.setState({
+        loading: false,
+      });
+    }
   }
+
+  onSearch = ({ search }) => {
+    this.setState({
+      search: search,
+    })
+  };
 
   loadMore = () => {
     this.setState(({ page }) => {
@@ -62,19 +59,21 @@ class App extends Component {
   }
 
   render() {
-    const { items, loading, error } = this.state
-    const isImages = Boolean(items.length)
+    const { onSearch } = this;
+    const { items, loading, error } = this.state;
+    const isImages = Boolean(items.length);
     const {loadMore} = this
     return (
       <>
-        <Searchbar />
+        <Searchbar onSubmit={onSearch} />
         {loading && <Loader />}
-        {error && <p>Перезавантажте сторінку</p>}
+        {error && <p>Щось пішло не так!</p>}
         {isImages && <ImageGallery items={items} />}
-        {isImages && <button type="button" onClick={loadMore}>Load more</button>}
+        {isImages && < Button onClick={loadMore} title='Load more'/>}
+        {/* {isImages && <button type="button" onClick={loadMore}>Load more</button>} */}
       </>
     )
-  }
-}
+  };
+};
 
-export default App
+export default App;
