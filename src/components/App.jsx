@@ -94,7 +94,7 @@ class App extends Component{
     return (
       <>
         <Searchbar onSubmit={onSearch} />
-        {modalOpen && <Modal items={items} onClse={closeModal}><img src={modalContent.largeImageURL} alt={modalContent.tags} /></Modal>}
+        {modalOpen && <Modal items={items} onClose={closeModal}><img src={modalContent.largeImageURL} alt={modalContent.tags} /></Modal>}
         {loading && <Loader />}
         {error && <p>Щось пішло не так!</p>}
         {isImages && <ImageGallery items={items} onClick={openModal} />}
