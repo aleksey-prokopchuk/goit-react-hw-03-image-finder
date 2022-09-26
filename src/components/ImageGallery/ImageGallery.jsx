@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
@@ -14,3 +15,8 @@ function ImageGallery({items, onClick}) {
 };
 
 export default ImageGallery;
+
+ImageGallery.propTypes = {
+  items: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
+};

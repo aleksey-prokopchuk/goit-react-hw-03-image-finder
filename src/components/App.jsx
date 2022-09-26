@@ -95,9 +95,9 @@ class App extends Component{
         {modalOpen && <Modal items={items} onClose={closeModal}>
           <img src={modalContent.largeImageURL} alt={modalContent.tags} />
         </Modal>}
-        {loading && <Loader />}
-        {error && <p>Щось пішло не так!</p>}
         {isImages && <ImageGallery items={items} onClick={openModal} />}
+        {loading && <Loader />}
+        {error && <p>Something went wrong !</p>}
         {isImages && < Button onClick={loadMore} title='Load more' />}
       </div>
     );
