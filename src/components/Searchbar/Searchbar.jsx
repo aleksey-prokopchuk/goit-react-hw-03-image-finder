@@ -1,16 +1,18 @@
 import { Component } from "react";
+import css from './Searchbar.module.css'
+
+const { searchbar, form, button, button_label, input } = css;
 
 class Searchbar extends Component{
   state = {
     search: '',
-  }
+  };
 
   handleChange = (event) => {
-    console.log(event.target.value)
     const { value, name } = event.target;
     this.setState({
       [name]: value,
-    })
+    });
   };
 
   handleSubmit = (event) => {
@@ -24,21 +26,21 @@ class Searchbar extends Component{
     this.setState({
       search: '',
     })
-  }
+  };
 
   render() {
     const { search } = this.state;
     const { handleSubmit, handleChange } = this;
-    return (<header className='searchbar'>
-      <form className="form" onSubmit={handleSubmit}>
-        <button type="submit" className="button">
-          <span className="button-label">Search</span>
+    return (<header className={searchbar}>
+      <form className={form} onSubmit={handleSubmit}>
+        <button type="submit" className={button}>
+          <span className={button_label}>Search</span>
         </button>
         <input
           onChange={handleChange}
           name='search'
           value={search}
-          className="input"
+          className={input}
           type="text"
           autoComplete="off"
           autoFocus
@@ -46,7 +48,7 @@ class Searchbar extends Component{
         />
       </form>
     </header>)
-  }
-}
+  };
+};
 
-export default Searchbar
+export default Searchbar;

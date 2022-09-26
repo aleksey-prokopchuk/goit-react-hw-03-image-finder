@@ -1,6 +1,10 @@
-function Button({title, onClick}) {
+import css from './Button.moule.css';
+
+const { button } = css;
+
+function Button({ title, onClick }) {
     return (
-        <button type="button" onClick={onClick}>
+        <button className={button} type="button" onClick={onClick}>
             {title}
         </button>
     );

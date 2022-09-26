@@ -2,9 +2,12 @@ import { Component } from "react";
 import Searchbar from './Searchbar/Searchbar';
 import { searchImage } from './api/image';
 import Loader from "./Loader/Loader";
-import ImageGallery from './ImageGallery/ImageGallery'
-import Button from './Button/Button'
-import Modal from './Modal/Modal'
+import ImageGallery from './ImageGallery/ImageGallery';
+import Button from './Button/Button';
+import Modal from './Modal/Modal';
+import css from './App.module.css';
+
+const { app } = css;
 
 class App extends Component{
   state = {
@@ -25,11 +28,6 @@ class App extends Component{
     if ((search && prevState.search !== search) || page > prevState.page)  {
       this.fetchImage(search, page);
     };
-    // if (search !== prevState.search) {
-    //   this.setState({
-    //     search: '',
-    //   })
-    // }
   };
 
   async fetchImage() {
@@ -43,31 +41,31 @@ class App extends Component{
         return {
           items: [...items, ...data.hits]
         };
-      })
+      });
     } catch (error) {
       this.setState({
         error,
-      })
+      });
     } finally {
       this.setState({
         loading: false,
       });
-    }
-  }
+    };
+  };
 
   onSearch = ({ search }) => {
     this.setState({
       search: search,
-    })
+    });
   };
 
   loadMore = () => {
     this.setState(({ page }) => {
       return {
         page: page + 1
-      }
-    })
-  }
+      };
+    });
+  };
 
   openModal = (modalContent) => {
     this.setState({
@@ -90,18 +88,19 @@ class App extends Component{
     const { onSearch } = this;
     const { items, loading, error, modalOpen, modalContent } = this.state;
     const isImages = Boolean(items.length);
-    const {loadMore, closeModal, openModal} = this
+    const { loadMore, closeModal, openModal } = this;
     return (
-      <>
+      <div className={app}>
         <Searchbar onSubmit={onSearch} />
-        {modalOpen && <Modal items={items} onClose={closeModal}><img src={modalContent.largeImageURL} alt={modalContent.tags} /></Modal>}
+        {modalOpen && <Modal items={items} onClose={closeModal}>
+          <img src={modalContent.largeImageURL} alt={modalContent.tags} />
+        </Modal>}
         {loading && <Loader />}
         {error && <p>Щось пішло не так!</p>}
         {isImages && <ImageGallery items={items} onClick={openModal} />}
-        {isImages && < Button onClick={loadMore} title='Load more'/>}
-        {/* {isImages && <button type="button" onClick={loadMore}>Load more</button>} */}
-      </>
-    )
+        {isImages && < Button onClick={loadMore} title='Load more' />}
+      </div>
+    );
   };
 };
 

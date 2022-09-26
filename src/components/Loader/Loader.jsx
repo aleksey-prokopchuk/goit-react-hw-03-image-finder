@@ -1,18 +1,18 @@
-import { ThreeDots } from 'react-loader-spinner'
+import { ThreeDots } from 'react-loader-spinner';
 
 function Loader() {
     return (
-        <ThreeDots 
-            height="80" 
-            width="80" 
+        <ThreeDots
+            height="80"
+            width="80"
             radius="9"
-            color="#4fa94d" 
+            color="#4fa94d"
             ariaLabel="three-dots-loading"
             wrapperStyle={{}}
             wrapperClassName=""
             visible={true}
         />
-    )
-}
+    );
+};
 
-export default Loader
+export default Loader;
