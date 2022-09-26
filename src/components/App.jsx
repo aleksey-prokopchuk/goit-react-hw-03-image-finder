@@ -4,6 +4,7 @@ import { searchImage } from './api/image';
 import Loader from "./Loader/Loader";
 import ImageGallery from './ImageGallery/ImageGallery'
 import Button from './Button/Button'
+import Modal from './Modal/Modal'
 
 class App extends Component{
   state = {
@@ -12,6 +13,11 @@ class App extends Component{
     error: null,
     search: '',
     page: 1,
+    modalOpen: false,
+    modalContent: {
+      largeImageURL: '',
+      tags: '',
+    }
   };
 
   componentDidUpdate(_, prevState) {
@@ -19,6 +25,11 @@ class App extends Component{
     if ((search && prevState.search !== search) || page > prevState.page)  {
       this.fetchImage(search, page);
     };
+    // if (search !== prevState.search) {
+    //   this.setState({
+    //     search: '',
+    //   })
+    // }
   };
 
   async fetchImage() {
@@ -58,17 +69,35 @@ class App extends Component{
     })
   }
 
+  openModal = (modalContent) => {
+    this.setState({
+      modalOpen: true,
+      modalContent
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalOpen: false,
+      modalContent: {
+        largeImageURL: '',
+       tags: '',
+      }
+    });
+  };
+
   render() {
     const { onSearch } = this;
-    const { items, loading, error } = this.state;
+    const { items, loading, error, modalOpen, modalContent } = this.state;
     const isImages = Boolean(items.length);
-    const {loadMore} = this
+    const {loadMore, closeModal, openModal} = this
     return (
       <>
         <Searchbar onSubmit={onSearch} />
+        {modalOpen && <Modal items={items} onClse={closeModal}><img src={modalContent.largeImageURL} alt={modalContent.tags} /></Modal>}
         {loading && <Loader />}
         {error && <p>Щось пішло не так!</p>}
-        {isImages && <ImageGallery items={items} />}
+        {isImages && <ImageGallery items={items} onClick={openModal} />}
         {isImages && < Button onClick={loadMore} title='Load more'/>}
         {/* {isImages && <button type="button" onClick={loadMore}>Load more</button>} */}
       </>
