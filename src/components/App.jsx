@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Searchbar from './Searchbar/Searchbar';
-import { searchImage } from './api/image';
+import { searchImage } from '../api/image';
 import Loader from "./Loader/Loader";
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
@@ -85,20 +85,19 @@ class App extends Component{
   };
 
   render() {
-    const { onSearch } = this;
     const { items, loading, error, modalOpen, modalContent } = this.state;
-    const isImages = Boolean(items.length);
-    const { loadMore, closeModal, openModal } = this;
+    // const isImages = Boolean(items.length);
+    const { loadMore, closeModal, openModal, onSearch } = this;
     return (
       <div className={app}>
         <Searchbar onSubmit={onSearch} />
         {modalOpen && <Modal items={items} onClose={closeModal}>
           <img src={modalContent.largeImageURL} alt={modalContent.tags} />
         </Modal>}
-        {isImages && <ImageGallery items={items} onClick={openModal} />}
+        {!!items.length && <ImageGallery items={items} onClick={openModal} />}
         {loading && <Loader />}
         {error && <p>Something went wrong !</p>}
-        {isImages && < Button onClick={loadMore} title='Load more' />}
+        {!!items.length && < Button onClick={loadMore} title='Load more' />}
       </div>
     );
   };
